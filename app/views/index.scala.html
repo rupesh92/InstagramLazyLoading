@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>S3 Browser</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+<style>
+
+    .proxyDetails { display:none; }
+    .check:checked+.proxyDetails{
+    display:block;
+    }
+</style>
+
+<div class ="container">
+    <h1 class="head">Welcome to the Instagram</h1>
+    <div class="jumbotron">
+
+
+        @helper.form(action = routes.Application.check()){
+        <form role="form" class="form-horizontal" >
+            <div class="form-group">
+                <label for="tag" class="inplabel">Tag:</label>
+                <input class="form-control" id="tag" name="tag" placeholder="HashTag">
+            </div>
+
+<!--
+
+            <div class="form-group">
+                <label>Proxy Manual Configuration</label>
+                <input class="check" type="checkbox" name="checkbox" >
+
+
+
+                <div class="proxyDetails" >
+                    <div class="form-group">
+                        <label for="ip" class="inplabel">IP Address</label>
+                        <input class="form-control" id="ip" name="ip" placeholder="IP">
+                    </div>
+                    <div class="form-group">
+                        <label for="port" class="inplabel">Port Number</label>
+                        <input class="form-control" id = "port" type="text" name="port" placeholder="Port Number">
+                    </div>
+                </div>
+
+
+            </div>
+-->
+
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+    }
+</div>
+<script src="https://code.jquery.com/jquery.js"></script>
+<!-- Include all compiled plugins (below), or include individual files
+      as needed -->
+<script src="js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
+
