@@ -1,12 +1,14 @@
 package controllers;
 
+import org.json.JSONArray;
 import models.Bar;
+import org.json.JSONException;
 import org.json.JSONObject;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.check;
-import views.html.index;
+import views.html.*;
 
 import java.io.*;
 import java.net.URL;
@@ -16,11 +18,11 @@ import static play.data.Form.form;
 
 
 public class Application extends Controller {
-
+    public static JSONObject jObj,jsonObj;
     public static Result index() {
         return ok(index.render());
     }
-
+    public  static String jsonText;
     public static String getURL(String tag){
 
         String str = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?client_id=263b705f62dd4d6681ef922630b40627&access_token=1673290394.263b705.f4471f2caf7b4fc39e1534c2789b687f";
@@ -32,10 +34,10 @@ public class Application extends Controller {
         InputStream is = new URL(s).openStream();
         try {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-            String jsonText = readAll(rd);
+             jsonText = readAll(rd);
 
-            JSONObject jsonObj = new JSONObject(jsonText);
-            System.out.println(jsonObj.get("pagination"));
+             jsonObj = new JSONObject(jsonText);
+          //  System.out.println(jsonObj.get("data"));
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +51,7 @@ public class Application extends Controller {
         }
         return sb.toString();
     }
-    public static Result check() throws IOException {
+    public static Result check() throws IOException{
         Form<Bar> userForm = form(Bar.class).bindFromRequest();
 
         if (!userForm.hasErrors()) {
@@ -61,7 +63,28 @@ public class Application extends Controller {
 
             fetchData(url);
         }
-        return ok(check.render());
+        try {
+            JSONArray jsonArray = new JSONArray(jsonObj.get("data").toString());
+            System.out.println("Length of the Array is" + new JSONObject(jsonArray.get(0).toString()).get("link"));
+            jObj =new JSONObject();
+            jObj.put("",new JSONArray());
+            for(int i =0;i<jsonArray.length();i++){
+                jObj.append("",(new JSONObject(jsonArray.get(i).toString())).get("link"));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return redirect(routes.Application.view());
+
+    }
+    public static Result view() throws IOException  {
+     return ok(viewImage.render());
+    }
+    public static Result listJson() {
+        System.out.println("the json obj is" + jObj.toString());
+        return ok(Json.toJson(jObj.toString()));
+
     }
 
 }
