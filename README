@@ -1,4 +1,7 @@
-This is your new Play application
-=================================
+This is a simple Play Application which allows you to fetch images lazily by hashtag from Instagram.
 
-This file will be packaged with your application, when using `activator dist`.
+1. Download the latest play framework package from its official site.
+2. Add the downloaded activator directory to your PATH.
+3. Clone the repository here.
+4. Move to the directory and run the following commands.
+  activator ~run
