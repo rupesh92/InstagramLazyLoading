@@ -2,46 +2,85 @@
 
 <!DOCTYPE html>
 
-<html>
+<html ng-app="Demo">
 <head>
-    <title>S3 Browser</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fetched Images</title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
-    <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
-<script>
-    angular.module('foo', [])
+    <script type="text/javascript" src= "http://kvasnicak.info/examples/vendor/angular.min.js"></script>
 
-    .filter('substring', function() {
-    return function(str, start, end) {
-    return str.substring(start, end);
-    };
-    })
-</script>
 
 </head>
 
 <body class="container">
 
+<div ng-controller="NamesCtrl">
 
+    {{names}}
+<div class="images">
 
-<div ng-app= "foo" ng-controller="NamesCtrl">
-
-    <label>Search File</label>
-    <li>
-        <ul>
-            <li class="animate-repeat" ng-repeat="n in names">
-                <image src={{n}}></image>
-            </li>
-        </ul>
-
-
+    <img  image-lazy-src={{n}} width="400" height="400" ng-repeat="n in names track by $index"/>
 </div>
+</div>
+
+<script>
+
+    angular.module('Demo', []).run(
+        function($rootScope) {
+          $rootScope.photos = new Array(10);
+        }
+    );
+
+    angular.module('Demo').directive(
+        'imageLazySrc', function($document, $window) {
+          return {
+            restrict: 'A',
+            link: function($scope, $element, $attributes) {
+
+              function isInView() {
+                // get current viewport position and dimensions, and image position
+                var clientHeight = $document[0].documentElement.clientHeight,
+                    clientWidth = $document[0].documentElement.clientWidth,
+                    imageRect = $element[0].getBoundingClientRect();
+
+                if (
+                    (imageRect.top >= 0 && imageRect.bottom <= clientHeight)
+                    &&
+                    (imageRect.left >= 0 && imageRect.right <= clientWidth)
+                ) {
+                  $element[0].src = $attributes.imageLazySrc; // set src attribute on element (it will load image)
+
+                  // unbind event listeners when image src has been set
+                  removeEventListeners();
+                }
+              }
+
+              function removeEventListeners() {
+                $window.removeEventListener('scroll', isInView);
+                $window.removeEventListener('resize', isInView);
+              }
+
+              // bind scroll and resize event listener to window
+              $window.addEventListener('scroll', isInView);
+              $window.addEventListener('resize', isInView);
+
+              // unbind event listeners if element was destroyed
+              // it happens when you change view, etc
+              $element.on('$destroy', function() {
+                removeEventListeners();
+              });
+
+              // explicitly call scroll listener (because, some images are in viewport already and we haven't scrolled yet)
+              isInView();
+            }
+          };
+        }
+    );
+  </script>
+
 <script>
                 function test(callback){
                     $.getJSON("http://localhost:9000/listJson" ,function(data){
@@ -64,5 +103,7 @@
 
 
     </script>
+
+
 </body>
 </html>
