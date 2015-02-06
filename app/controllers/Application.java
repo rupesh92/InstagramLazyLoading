@@ -31,6 +31,7 @@ public class Application extends Controller {
 
     public static boolean fetchData(String s ) throws IOException {
         //  System.setProperty("java.net.useSystemProxies", "true");
+        System.out.println(s);
         InputStream is = new URL(s).openStream();
         try {
             BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -65,11 +66,11 @@ public class Application extends Controller {
         }
         try {
             JSONArray jsonArray = new JSONArray(jsonObj.get("data").toString());
-            System.out.println("Length of the Array is" + new JSONObject(jsonArray.get(0).toString()).get("link"));
+            System.out.println("Length of the Array is" +  new JSONObject(new JSONObject(new JSONObject(jsonArray.get(0).toString()).get("images").toString()).get("standard_resolution").toString()).get("url"));
             jObj =new JSONObject();
             jObj.put("",new JSONArray());
             for(int i =0;i<jsonArray.length();i++){
-                jObj.append("",(new JSONObject(jsonArray.get(i).toString())).get("link"));
+                jObj.append("", new JSONObject(new JSONObject(new JSONObject(jsonArray.get(i).toString()).get("images").toString()).get("standard_resolution").toString()).get("url"));
             }
 
         } catch (JSONException e) {

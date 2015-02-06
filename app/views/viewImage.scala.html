@@ -14,6 +14,15 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
     <script src= "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+<script>
+    angular.module('foo', [])
+
+    .filter('substring', function() {
+    return function(str, start, end) {
+    return str.substring(start, end);
+    };
+    })
+</script>
 
 </head>
 
@@ -21,16 +30,13 @@
 
 
 
-<div ng-app= "" ng-controller="NamesCtrl">
+<div ng-app= "foo" ng-controller="NamesCtrl">
 
     <label>Search File</label>
     <li>
         <ul>
             <li class="animate-repeat" ng-repeat="n in names">
-                {{n}}
-            </li>
-            <li class="animate-repeat" ng-repeat="n in names">
-                <img src={{n}}/>
+                <image src={{n}}></image>
             </li>
         </ul>
 
